@@ -1,0 +1,815 @@
+<?xml version="1.0"?>
+<definitions xmlns:api="http://api.affiliatewindow.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://api.affiliatewindow.com/">
+	<types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://api.affiliatewindow.com/" elementFormDefault="qualified">
+			<!-- Generic Types -->
+			<!--	<xsd:complexType name="ArrayOfint">
+	
+				<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:int[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<xsd:complexType name="Money">
+				<xsd:sequence>
+					<xsd:element name="dAmount" type="xsd:decimal"/>
+					<xsd:element name="sCurrency" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Region">
+				<xsd:sequence>
+					<xsd:element name="sName" type="xsd:string"/>
+					<xsd:element name="sCountryCode" type="xsd:string"/>
+					<xsd:element name="sCurrencyCode" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- User authentication -->
+			<xsd:element name="UserAuthentication">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="iId" type="xsd:int"/>
+						<xsd:element name="sPassword" type="xsd:string"/>
+						<xsd:element name="sType" type="api:UserType"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:simpleType name="UserType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="affiliate"/>
+					<xsd:enumeration value="merchant"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<!-- Operations Quota -->
+			<xsd:element name="getQuota" type="xsd:boolean"/>
+			<xsd:element name="getQuotaResponse" type="xsd:int"/>
+			<!-- Commission Group -->
+			<xsd:element name="getCommissionGroup">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="iMerchantId" type="xsd:int" minOccurs="1"/>
+						<xsd:element name="sCommissionGroupCode" type="xsd:string" minOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getCommissionGroupResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getCommissionGroupReturn" type="api:CommissionGroup"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="CommissionGroup">
+				<xsd:sequence>
+					<xsd:element name="sCommissionGroupCode" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sCommissionGroupName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="mAmount" type="api:Money" minOccurs="0"/>
+					<xsd:element name="fPercentage" type="xsd:float" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- Commission Group List -->
+			<xsd:element name="getCommissionGroupList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="iMerchantId" type="xsd:int" minOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getCommissionGroupListResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getCommissionGroupListReturn" type="api:CommissionGroup" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!--<xsd:complexType name="ArrayOfCommissionGroup">
+	<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:CommissionGroup[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<!-- TransactionProduct -->
+			<xsd:element name="getTransactionProduct">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="aTransactionIds" type="xsd:int" nillable="true" minOccurs="1" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getTransactionProductResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getTransactionProductReturn" type="api:TransactionProduct" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="TransactionProduct">
+				<xsd:sequence>
+					<xsd:element name="iTransactionId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="aProducts" type="api:Product" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Product">
+				<xsd:sequence>
+					<xsd:element name="sId" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="mUnitPrice" type="api:Money" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!--<xsd:complexType name="ArrayOfProduct">
+	<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:Product[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ArrayOfTransactionProduct">
+-		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:TransactionProduct[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+</xsd:complexType>-->
+			<!-- Transaction List -->
+			<xsd:element name="getTransactionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="aMerchantIds" type="xsd:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="dStartDate" type="xsd:dateTime"/>
+						<xsd:element name="dEndDate" type="xsd:dateTime"/>
+						<xsd:element name="sDateType" type="api:DateType"/>
+						<xsd:element name="sTransactionStatus" type="api:TransactionStatus" minOccurs="0"/>
+						<xsd:element name="iOffset" type="xsd:int" default="0" minOccurs="0"/>
+						<xsd:element name="iLimit" type="xsd:int" default="100" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:simpleType name="DateType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="transaction"/>
+					<xsd:enumeration value="validation"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="TransactionStatus">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="pending"/>
+					<xsd:enumeration value="confirmed"/>
+					<xsd:enumeration value="declined"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="getTransactionListResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getTransactionListReturn" type="api:getTransactionListReturn"/>
+						<xsd:element name="getTransactionListCountReturn" type="api:RowCounts"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="getTransactionListReturn">
+				<xsd:sequence>
+					<xsd:element name="Transaction" type="api:Transaction" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- Transaction -->
+			<xsd:element name="getTransaction">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="aTransactionIds" type="api:aTransactionId"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="aTransactionId">
+				<xsd:sequence>
+					<xsd:element name="aTransactionId" type="xsd:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Transaction">
+				<xsd:sequence>
+					<xsd:element name="iId" type="xsd:int"/>
+					<xsd:element name="sStatus" type="api:TransactionStatus"/>
+					<xsd:element name="sType" type="api:TransactionType"/>
+					<xsd:element name="sIp" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="bPaid" type="xsd:boolean"/>
+					<xsd:element name="iPaymentId" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="sDeclinedReason" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="iMerchantId" type="xsd:int"/>
+					<xsd:element name="mSaleAmount" type="api:Money"/>
+					<xsd:element name="mCommissionAmount" type="api:Money"/>
+					<xsd:element name="dClickDate" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="dTransactionDate" type="xsd:dateTime"/>
+					<xsd:element name="dValidationDate" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="sClickref" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sSearchSiteName" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sSearchSiteKeyword" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="aTransactionParts" type="api:aTransactionParts"/>
+					<xsd:element name="sExtra" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="aTransactionParts">
+				<xsd:sequence>
+					<xsd:element name="TransactionPart" type="api:TransactionPart" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TransactionPart">
+				<xsd:sequence>
+					<xsd:element name="sCommissionGroupName" type="xsd:string"/>
+					<xsd:element name="mSaleAmount" type="api:Money"/>
+					<xsd:element name="mCommissionAmount" type="api:Money"/>
+					<xsd:element name="iCommission" type="xsd:int"/>
+					<xsd:element name="sCommissionType" type="api:CommissionType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="TransactionType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="normal"/>
+					<xsd:enumeration value="bonus"/>
+					<xsd:enumeration value="second tier"/>
+					<xsd:enumeration value="untracked"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="CommissionType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="percentage"/>
+					<xsd:enumeration value="amount"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<!--<xsd:complexType name="ArrayOfTransactionPart">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:TransactionPart[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>			
+	</xsd:complexType>
+	<xsd:complexType name="ArrayOfTransaction">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:Transaction[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>				
+	</xsd:complexType>-->
+			<xsd:element name="getTransactionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getTransactionReturn" type="api:getTransactionReturn"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			
+			<xsd:complexType name="getTransactionReturn">
+					<xsd:sequence>
+						<xsd:element name="Transaction" type="api:Transaction" nillable="true" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			
+			<!-- Merchant -->
+			<xsd:element name="getMerchant">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="aMerchantIds" type="xsd:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="Merchant">
+				<xsd:sequence>
+					<xsd:element name="iId" type="xsd:int"/>
+					<xsd:element name="sName" type="xsd:string"/>
+					<xsd:element name="sDisplayUrl" type="xsd:string"/>
+					<xsd:element name="sClickThroughUrl" type="xsd:string"/>
+					<xsd:element name="oPrimaryRegion" type="api:Region"/>
+					<xsd:element name="sLogoUrl" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="iDetailsVersion" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="dDetailsModified" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="iFeedVersion" type="xsd:int" minOccurs="0"/>
+					<xsd:element name="dFeedModified" type="xsd:dateTime" minOccurs="0"/>
+					<xsd:element name="sStrapline" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sDescription" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="fApprovalPercentage" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="fEpc" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="fConversionRate" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="iValidationDays" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="fAwinGrade" type="xsd:float" minOccurs="0"/>
+					<xsd:element name="aCommissionRanges" type="api:CommissionRange" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="aSectors" type="api:MerchantSector" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="MerchantSector">
+				<xsd:sequence>
+					<xsd:element name="iSectorId" type="xsd:int"/>
+					<xsd:element name="sSectorName" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!--<xsd:complexType name="ArrayOfMerchantSectors">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:MerchantSector[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>		
+	</xsd:complexType>-->
+			<xsd:complexType name="CommissionRange">
+				<xsd:sequence>
+					<xsd:element name="sType" type="api:CommissionType"/>
+					<xsd:element name="fMin" type="xsd:float"/>
+					<xsd:element name="fMax" type="xsd:float"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!--<xsd:complexType name="ArrayOfCommissionRanges">
+<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:CommissionRange[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ArrayOfMerchant">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:Merchant[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<xsd:element name="getMerchantResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getMerchantReturn" type="api:Merchant" nillable="true" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- Merchants List -->
+			<xsd:element name="getMerchantList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="sRelationship" type="api:Relationship" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:simpleType name="Relationship">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="joined"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="getMerchantListResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getMerchantListReturn" type="api:Merchant" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- getTransactionQuerys -->
+			<!-- Main call -->
+			<xsd:element name="getTransactionQuerys">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="aMerchantIds" type="xsd:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="aStatus" type="api:TransactionPreStatus" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="aClickRefs" type="xsd:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="iOffset" type="xsd:int" default="0" minOccurs="0"/>
+						<xsd:element name="iLimit" type="xsd:int" default="100" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!--<xsd:complexType name="ArrayOfTransactionPreStatus">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:TransactionPreStatus[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<xsd:simpleType name="TransactionPreStatus">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="pending"/>
+					<xsd:enumeration value="approved"/>
+					<xsd:enumeration value="declined"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:element name="getTransactionQuerysResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getTransactionQuerysReturn" type="api:TransactionQuery" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="getTransactionQuerysCountReturn" type="api:RowCounts"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!--<xsd:complexType name="ArrayOfTransactionQuerys">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:TransactionQuery[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<xsd:complexType name="TransactionQuery">
+				<xsd:sequence>
+					<xsd:element name="iEnquiryId" type="xsd:int"/>
+					<xsd:element name="iMerchantId" type="xsd:int"/>
+					<xsd:element name="sClickRef" type="xsd:string"/>
+					<xsd:element name="sStatus" type="xsd:string"/>
+					<xsd:element name="mAmount" type="api:Money"/>
+					<xsd:element name="mCommission" type="api:Money"/>
+					<xsd:element name="dDate" type="xsd:dateTime"/>
+					<xsd:element name="sCustomerReference" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sReference" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sProgramName" type="xsd:string"/>
+					<xsd:element name="sDeclineReason" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="sType" type="xsd:string"/>
+					<xsd:element name="sDescription" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- getClickStats -->
+			<!-- Main call -->
+			<xsd:element name="getClickStats">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="dStartDate" type="xsd:dateTime"/>
+						<xsd:element name="dEndDate" type="xsd:dateTime"/>
+						<xsd:element name="aMerchantIds" type="xsd:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="sDateType" type="api:DateType" default="transaction"/>
+						<xsd:element name="iOffset" type="xsd:int" default="0" minOccurs="0"/>
+						<xsd:element name="iLimit" type="xsd:int" default="100" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getClickStatsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getClickStatsReturn" type="api:ClickStats" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="getClickStatsCountReturn" type="api:RowCounts"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!--<xsd:complexType name="ArrayOfClickStats">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:ClickStats[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<xsd:complexType name="ClickStats">
+				<xsd:sequence>
+					<xsd:element name="sLinkName" type="xsd:string"/>
+					<xsd:element name="sLinkType" type="xsd:string"/>
+					<xsd:element name="sMerchantName" type="xsd:string"/>
+					<xsd:element name="iPendingCount" type="xsd:int"/>
+					<xsd:element name="mPendingValue" type="api:Money"/>
+					<xsd:element name="mPendingCommission" type="api:Money"/>
+					<xsd:element name="iConfirmedCount" type="xsd:int"/>
+					<xsd:element name="mConfirmedValue" type="api:Money"/>
+					<xsd:element name="mConfirmedCommission" type="api:Money"/>
+					<xsd:element name="iDeclinedCount" type="xsd:int"/>
+					<xsd:element name="mDeclinedValue" type="api:Money"/>
+					<xsd:element name="mDeclinedCommission" type="api:Money"/>
+					<xsd:element name="iClicks" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- getImpressionStats -->
+			<!-- Main call -->
+			<xsd:element name="getImpressionStats">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="dStartDate" type="xsd:dateTime"/>
+						<xsd:element name="dEndDate" type="xsd:dateTime"/>
+						<xsd:element name="aMerchantIds" type="xsd:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element name="sDateType" type="api:DateType" default="transaction"/>
+						<xsd:element name="iOffset" type="xsd:int" default="0" minOccurs="0"/>
+						<xsd:element name="iLimit" type="xsd:int" default="100" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getImpressionStatsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="getImpressionStatsReturn" type="api:ImpressionStats" nillable="true" maxOccurs="unbounded"/>
+						<xsd:element name="getImpressionStatsCountReturn" type="api:RowCounts"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!--	<xsd:complexType name="ArrayOfImpressionStats">
+		<xsd:complexContent>
+			<xsd:restriction base="soapenc:Array">
+				<xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="api:ImpressionStats[]"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>-->
+			<xsd:complexType name="ImpressionStats">
+				<xsd:sequence>
+					<xsd:element name="sLinkName" type="xsd:string"/>
+					<xsd:element name="sLinkType" type="xsd:string"/>
+					<xsd:element name="sMerchantName" type="xsd:string"/>
+					<xsd:element name="iPendingCount" type="xsd:int"/>
+					<xsd:element name="mPendingValue" type="api:Money"/>
+					<xsd:element name="mPendingCommission" type="api:Money"/>
+					<xsd:element name="iConfirmedCount" type="xsd:int"/>
+					<xsd:element name="mConfirmedValue" type="api:Money"/>
+					<xsd:element name="mConfirmedCommission" type="api:Money"/>
+					<xsd:element name="iDeclinedCount" type="xsd:int"/>
+					<xsd:element name="mDeclinedValue" type="api:Money"/>
+					<xsd:element name="mDeclinedCommission" type="api:Money"/>
+					<xsd:element name="iImpressions" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="RowCounts">
+				<xsd:sequence>
+					<xsd:element name="iRowsReturned" type="xsd:int"/>
+					<xsd:element name="iRowsAvailable" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- Faults -->
+			<xsd:element name="ApiException">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="message" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</schema>
+	</types>
+	<message name="UserAuthentication">
+		<part name="parameters" element="api:UserAuthentication"/>
+	</message>
+	<message name="getQuotaRequest">
+		<part name="parameters" element="api:getQuota"/>
+	</message>
+	<message name="getQuotaResponse">
+		<part name="return" element="api:getQuotaResponse"/>
+	</message>
+	<message name="getTransactionProductRequest">
+		<part name="parameters" element="api:getTransactionProduct"/>
+	</message>
+	<message name="getTransactionListRequest">
+		<part name="parameters" element="api:getTransactionList"/>
+	</message>
+	<message name="getTransactionRequest">
+		<part name="parameters" element="api:getTransaction"/>
+	</message>
+	<message name="getMerchantListRequest">
+		<part name="parameters" element="api:getMerchantList"/>
+	</message>
+	<message name="getMerchantRequest">
+		<part name="parameters" element="api:getMerchant"/>
+	</message>
+	<message name="getTransactionQuerysRequest">
+		<part name="parameters" element="api:getTransactionQuerys"/>
+	</message>
+	<message name="getImpressionStatsRequest">
+		<part name="parameters" element="api:getImpressionStats"/>
+	</message>
+	<message name="getClickStatsRequest">
+		<part name="parameters" element="api:getClickStats"/>
+	</message>
+	<message name="getCommissionGroupRequest">
+		<part name="parameters" element="api:getCommissionGroup"/>
+	</message>
+	<message name="getCommissionGroupListRequest">
+		<part name="parameters" element="api:getCommissionGroupList"/>
+	</message>
+	<message name="getTransactionProductResponse">
+		<part name="parameters" element="api:getTransactionProductResponse"/>
+	</message>
+	<message name="getTransactionListResponse">
+		<part name="return" element="api:getTransactionListResponse"/>
+	</message>
+	<message name="getTransactionResponse">
+		<part name="return" element="api:getTransactionResponse"/>
+	</message>
+	<message name="getMerchantListResponse">
+		<part name="return" element="api:getMerchantListResponse"/>
+	</message>
+	<message name="getMerchantResponse">
+		<part name="return" element="api:getMerchantResponse"/>
+	</message>
+	<message name="getTransactionQuerysResponse">
+		<part name="return" element="api:getTransactionQuerysResponse"/>
+	</message>
+	<message name="getImpressionStatsResponse">
+		<part name="return" element="api:getImpressionStatsResponse"/>
+	</message>
+	<message name="getClickStatsResponse">
+		<part name="return" element="api:getClickStatsResponse"/>
+	</message>
+	<message name="getCommissionGroupResponse">
+		<part name="return" element="api:getCommissionGroupResponse"/>
+	</message>
+	<message name="getCommissionGroupListResponse">
+		<part name="return" element="api:getCommissionGroupListResponse"/>
+	</message>
+	<message name="ApiException">
+		<part name="ApiException" element="api:ApiException"/>
+	</message>
+	<portType name="ApiPortType">
+		<operation name="getTransactionProduct">
+			<input message="api:getTransactionProductRequest"/>
+			<output message="api:getTransactionProductResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getTransactionList">
+			<input message="api:getTransactionListRequest"/>
+			<output message="api:getTransactionListResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getTransaction">
+			<input message="api:getTransactionRequest"/>
+			<output message="api:getTransactionResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getMerchantList">
+			<input message="api:getMerchantListRequest"/>
+			<output message="api:getMerchantListResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getMerchant">
+			<input message="api:getMerchantRequest"/>
+			<output message="api:getMerchantResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getTransactionQuerys">
+			<input message="api:getTransactionQuerysRequest"/>
+			<output message="api:getTransactionQuerysResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getImpressionStats">
+			<input message="api:getImpressionStatsRequest"/>
+			<output message="api:getImpressionStatsResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getClickStats">
+			<input message="api:getClickStatsRequest"/>
+			<output message="api:getClickStatsResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getCommissionGroup">
+			<input message="api:getCommissionGroupRequest"/>
+			<output message="api:getCommissionGroupResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+		<operation name="getCommissionGroupList">
+			<input message="api:getCommissionGroupListRequest"/>
+			<output message="api:getCommissionGroupListResponse"/>
+			<fault name="ApiException" message="api:ApiException"/>
+		</operation>
+	</portType>
+	<binding name="ApiBinding" type="api:ApiPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="getTransactionList">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getTransactionProduct">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getTransaction">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getMerchantList">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getMerchant">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getTransactionQuerys">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getImpressionStats">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getClickStats">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getCommissionGroup">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+		<operation name="getCommissionGroupList">
+			<soap:operation soapAction=""/>
+			<input>
+				<soap:header message="api:UserAuthentication" part="parameters" use="literal"/>
+				<soap:header message="api:getQuotaRequest" part="parameters" use="literal"/>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:header message="api:getQuotaResponse" part="return" use="literal"/>
+				<soap:body use="literal"/>
+			</output>
+			<fault name="ApiException">
+				<soap:fault name="ApiException" use="literal"/>
+			</fault>
+		</operation>
+	</binding>
+	<service name="ApiService">
+		<port name="ApiPort" binding="api:ApiBinding">
+			<soap:address location="http://api.affiliatewindow.com/v4/AffiliateService"/>
+		</port>
+	</service>
+	<!-- TYPES -->
+	<!-- MESSAGES -->
+	<!-- Headers -->
+	<!-- Input Messages -->
+	<!-- Output Messages -->
+	<!-- Fault Messages -->
+	<!-- PORTS -->
+	<!-- BINDINGS -->
+	<!-- SERVICES -->
+</definitions>

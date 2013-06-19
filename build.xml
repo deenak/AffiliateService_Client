@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--                 
+    Cleans, retrieves, builds, and deploys application.
+-->
+<project name="affiliate-service-client" default="WSDL2Java" basedir=".">
+	<description>Affiliate service Service build file</description>
+	<property file="build.properties" />
+	
+	<property name="wsdl.dir" value="${wsdl.dir}" />
+
+	<target name="WSDL2Java" description="Affiliate Service API WSDL to Java Stubs">
+			<echo message="Generating Affiliate Service API service Stubs..." />
+
+			<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true" maxmemory="512m">
+				<arg value="-client" />
+				<arg value="-d" />
+				<arg value="${autogen.dir}" />
+				<arg value="-b" />
+				<arg value="bindings.xjb" />
+				<arg value="${wsdl.dir}/AffiliateService_e.wsdl" />
+				<classpath>
+					<fileset dir="${cxf.lib}" includes="*.jar" />
+					<fileset dir="${apache.lib}" includes="*.jar" />
+					<fileset dir="${jaxb.lib}" includes="*.jar" />
+				</classpath>
+			</java>			
+		</target>
+
+</project>
